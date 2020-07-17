@@ -40,12 +40,12 @@ MongoClient.connect('mongodb+srv://admin:rootroot@cluster0.vixc2.gcp.mongodb.net
 
         app.route('/articles').post(function (req, res, next) {
             var myObject = {
-                nom: req.body.nom,
+                titre: req.body.titre,
                 contenu: req.body.contenu,
-                Categorie: req.body.Categorie,
-                Date: req.body.Date,
-                Version: req.body.Version,
-                tag: req.body.tag
+                //Categorie: req.body.Categorie,
+                //Date: req.body.Date,
+                //Version: req.body.Version,
+                //tag: req.body.tag
             }
             collection.insertOne(myObject, function (err, result) {
                 if (err) throw err;

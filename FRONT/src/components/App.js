@@ -1,12 +1,10 @@
-
 //import logo from './logo.svg';
 //import './App.css';
-import Article from './Article' 
+import Article from "./Article";
 
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
 class App extends Component {
-  // Initialisation du composant : on décrit l'état initial du composant.
   constructor(props) {
     super(props);
     this.state = {
@@ -16,34 +14,50 @@ class App extends Component {
     };
   }
 
-  // On utilise la méthode fetch dans componentDidMount() 
-  // Cela permet d'effectuer la requête une fois que le composant "App" sera créé dans le DOM
-  // et ainsi pouvoir l'utiliser dans la méthode render().
   componentDidMount() {
-    fetch('http://localhost:3000/articles', {
-      method: 'GET',
+    fetch("http://localhost:3000/articles", {
+      method: "GET",
       headers: {
-        "Accept": "application/json"
-      }})
-    .then(res => res.json())
-    .then(
-      (result) => {
-        this.setState({
-          isLoaded: true,
-          data: result
-        });
+        Accept: "application/json",
       },
-      (error) => {
-        this.setState({
-          isLoaded: true,
-          error
-        });
-      }
-    )
+    })
+      .then((res) => res.json())
+      .then(
+        (result) => {
+          this.setState({
+            isLoaded: true,
+            data: result,
+          });
+        },
+        (error) => {
+          this.setState({
+            isLoaded: true,
+            error,
+          });
+        }
+      );
   }
 
+  handleChange = (event) => {
+    this.setState({ [event.target.name]: event.target.value });
+  };
 
-  // Gestion de l'affichage du composant.
+  handleSubmit = (event) => {
+    event.preventDefault();
+    console.log("titre : " + this.state.titre);
+
+    const url = "http://localhost:3000/articles";
+    const data = { titre: this.state.titre, contenu: this.state.contenu};
+    fetch(url, {
+      method: "POST",
+      body: JSON.stringify(data), 
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((res) => res.json())
+      .catch((error) => console.error("Error:", error))
+      .then((response) => console.log("Success:", response));
+  };
+
   render() {
     const { error, isLoaded, data } = this.state;
     if (error) {
@@ -51,15 +65,18 @@ class App extends Component {
     } else if (!isLoaded) {
       return <div>Chargement…</div>;
     } else {
-      // Pas d'erreur et les données sont bien chargées, on affiche le résultat de notre requête.
       return (
         <div>
-        {console.log(data)}
-        <Article posts={data}/>
-        <hr />
-        <h2>Ajouter un article</h2>
-        
-
+          {console.log(data)}
+          <Article posts={data} />
+          <hr />
+          <h2>Ajouter un article</h2>
+          <form onSubmit={this.handleSubmit}>
+            <input type="text" name="titre" onChange={this.handleChange} />
+            <input type="text" name="contenu" onChange={this.handleChange} />
+            
+            <input type="submit" value="Ajouter un article" />{" "}
+          </form>
         </div>
       );
     }
@@ -67,7 +84,6 @@ class App extends Component {
 }
 
 export default App;
-
 
 /* <ul>
     {
