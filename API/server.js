@@ -2,9 +2,12 @@ var MongoClient = require('mongodb').MongoClient;
 
 var express = require('express');
 const app = express()
+const cors = require('cors')
+
 
 app.use(express.json())
-app.use(express.static(__dirname + '/../FRONT/public'))
+app.use(express.static(__dirname + '/public'))
+app.use(cors())
 
 
 var hostname = 'localhost';
@@ -21,6 +24,7 @@ MongoClient.connect('mongodb+srv://admin:rootroot@cluster0.vixc2.gcp.mongodb.net
         app.route('/articles').get(function (req, res, next) {
             collection.find({}).toArray(function (err, result) {
                 if (err) throw err;
+                console.log(result);
                 res.json(result)
             })
         })
