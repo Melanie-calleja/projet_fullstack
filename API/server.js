@@ -4,10 +4,10 @@ var express = require('express');
 const app = express()
 
 app.use(express.json())
-app.use(express.static(__dirname + '/public'))
+app.use(express.static(__dirname + '/../FRONT/public'))
 
 
-var hostname = 'mongodb+srv://admin:rootroot@cluster0.vixc2.gcp.mongodb.net/<dbname>?retryWrites=true&w=majority';
+var hostname = 'localhost';
 var port = 3000;
 
 MongoClient.connect('mongodb+srv://admin:rootroot@cluster0.vixc2.gcp.mongodb.net/<dbname>?retryWrites=true&w=majority', function (err, client) {
@@ -77,8 +77,8 @@ MongoClient.connect('mongodb+srv://admin:rootroot@cluster0.vixc2.gcp.mongodb.net
             })
         })
 
-        // app.listen(port, hostname, function () {
-        //     console.log('Le serveur tourne sur l\'adresse : http://' + hostname + ':' + port);
-        // });
+        app.listen(port, hostname, function () {
+            console.log('Le serveur tourne sur l\'adresse : http://' + hostname + ':' + port);
+        });
     }
 })
