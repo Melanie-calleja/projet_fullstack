@@ -72,10 +72,10 @@ class App extends Component {
           <hr />
           <h2>Ajouter un article</h2>
           <form onSubmit={this.handleSubmit}>
-            <input type="text" name="titre" onChange={this.handleChange} />
-            <input type="text" name="contenu" onChange={this.handleChange} />
+            <input type="text" name="titre" onChange={this.handleChange} /><br />
+            <textarea type="text" name="contenu" onChange={this.handleChange} />
             
-            <input type="submit" value="Ajouter un article" />{" "}
+            <button type="submit">Add</button>
           </form>
         </div>
       );
