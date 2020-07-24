@@ -10,7 +10,7 @@ class App extends Component {
     this.state = {
       error: null,
       isLoaded: false,
-      data: null
+      postsData: null
     };
   }
 
@@ -26,7 +26,7 @@ class App extends Component {
         (result) => {
           this.setState({
             isLoaded: true,
-            data: result,
+            postsData: result,
           });
         },
         (error) => {
@@ -47,10 +47,10 @@ class App extends Component {
     console.log("titre : " + this.state.titre);
 
     const url = "http://localhost:3000/articles";
-    const data = { titre: this.state.titre, contenu: this.state.contenu};
+    const postsData = { titre: this.state.titre, contenu: this.state.contenu};
     fetch(url, {
       method: "POST",
-      body: JSON.stringify(data), 
+      body: JSON.stringify(postsData), 
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => res.json())
@@ -58,18 +58,28 @@ class App extends Component {
       .then((response) => console.log("Success:", response));
   };
 
+
+
   render() {
-    const { error, isLoaded, data } = this.state;
+    const { error, isLoaded, postsData } = this.state;
+    
+
     if (error) {
       return <div>Erreur : {error.message}</div>;
     } else if (!isLoaded) {
       return <div>Chargement…</div>;
     } else {
+      // const deleteArticle = (id) => {
+      //   setUsers(users.filter((user) => user.id !== id))
+      // }
+      
       return (
         <div>
-          {console.log(data)}
-          <Article posts={data} />
+          {console.log(postsData)}
+          <Article posts={postsData} />
+
           <hr />
+
           <h2>Ajouter un article</h2>
           <form onSubmit={this.handleSubmit}>
             <input type="text" name="titre" onChange={this.handleChange} /><br />
