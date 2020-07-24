@@ -1,5 +1,6 @@
 //import logo from './logo.svg';
 //import './App.css';
+import List from './list'
 import Article from "./Article";
 
 import React, { Component } from "react";
@@ -76,7 +77,8 @@ class App extends Component {
       return (
         <div>
           {console.log(postsData)}
-          <Article posts={postsData} />
+          
+          <List posts={postsData} />
 
           <hr />
 
