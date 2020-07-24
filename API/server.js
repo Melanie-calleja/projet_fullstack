@@ -77,12 +77,12 @@ MongoClient.connect('mongodb+srv://admin:rootroot@cluster0.vixc2.gcp.mongodb.net
                 {"_id": new ObjectId(req.params.id)}, 
                 {
                 $set: {
-                    "nom": req.body.nom,
+                    "titre": req.body.titre,
                     "contenu": req.body.contenu,
                     "Categorie": req.body.Categorie,
-                    "Date": req.body.Date,
-                    "Version": req.body.Version,
-                    "tag": req.body.tag
+                    //"Date": req.body.Date,
+                    //"Version": req.body.Version,
+                    //"tag": req.body.tag
                 },
             }, function (err, result) {
                 if (err) throw err;
