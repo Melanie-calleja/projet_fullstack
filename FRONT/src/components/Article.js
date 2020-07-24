@@ -9,28 +9,21 @@ class Article extends Component {
     };
   }
 
-  // handleChange(event) {
-  //   this.setState({ value: event.target.value });
-  // }
-
-  // handleSubmit = (event) => {
-  //   console.log("id : " + this.state.value);
-  //   event.preventDefault();
-
-  //   // const url = "http://localhost:3000/articles/this.state.id";
-  //   // const data = { id: this.idInput.value };
-  //   // fetch(url, {
-  //   //   method: "DELETE",
-  //   //   body: JSON.stringify(data),
-  //   //   headers: { "Content-Type": "application/json" },
-  //   // })
-  //   //   .then((res) => res.json())
-  //   //   .catch((error) => console.error("Error:", error))
-  //   //   .then((response) => console.log("Success:", response));
-  // };
-
-  removeItem() {
+  removeItem(e, id) {
     this.setState({ removed: !this.state.removed });
+    console.log("id : " +  id);
+    e.preventDefault();
+
+    const url = "http://localhost:3000/articles/" + id;
+    const data = { id: id };
+    fetch(url, {
+      method: "DELETE",
+      body: JSON.stringify(data),
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((res) => res.json())
+      .catch((error) => console.error("Error:", error))
+      .then((response) => console.log("Success:", response));
   }
 
   render() {
@@ -64,9 +57,8 @@ class Article extends Component {
       <li>
       
         {this.props.titre}
-        
 
-        <button className='removeBtn' onClick={e => this.removeItem(e)}> x </button>
+        <button className='removeBtn' onClick={e => this.removeItem(e, this.props.id)}> x </button>
         
       </li>
     );

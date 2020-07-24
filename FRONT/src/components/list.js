@@ -8,7 +8,7 @@ class List extends Component {
         <ul>
           {
             this.props.posts.map((post, index) => 
-            <Article titre={post.titre} state={post.state}  key={index} />
+            <Article titre={post.titre} id={post._id} state={post.state}  key={index} />
             )
           }
         </ul>
