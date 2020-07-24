@@ -38,11 +38,20 @@ MongoClient.connect('mongodb+srv://admin:rootroot@cluster0.vixc2.gcp.mongodb.net
             })
         })
 
+        app.route('/categorie/:categorie').get(function (req, res, next) {
+            //var query = { Categorie: "PHP" };
+            collection.find({ Categorie: req.params.categorie }).toArray(function (err, result) {
+                if (err) throw err;
+                console.log(result);
+                res.json(result)
+            })
+        })
+
         app.route('/articles').post(function (req, res, next) {
             var myObject = {
                 titre: req.body.titre,
                 contenu: req.body.contenu,
-                //Categorie: req.body.Categorie,
+                Categorie: req.body.Categorie,
                 //Date: req.body.Date,
                 //Version: req.body.Version,
                 //tag: req.body.tag
