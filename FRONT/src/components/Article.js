@@ -27,7 +27,26 @@ class Article extends Component {
   }
 
   render() {
-    // const sidebar = (
+    return (
+      
+      <li>
+      
+        <h3>{this.props.titre}</h3>
+        <p>{this.props.contenu}</p>
+        <p>Categorie : {this.props.categorie}</p>
+        <p>Tags : {this.props.tags}</p>
+        <p> Date : {this.props.date}</p>
+
+        <button className='removeBtn' onClick={e => this.removeItem(e, this.props.id)}> x </button>
+        
+      </li>
+    );
+  }
+}
+
+export default Article;
+
+ // const sidebar = (
     //   <ul>
     //     {this.props.posts.map((post) => (
     //       <li key={post.id}>{post.titre}</li>
@@ -52,17 +71,3 @@ class Article extends Component {
     //     <hr />
     //   </div>
     // ));
-    return (
-      
-      <li>
-      
-        {this.props.titre}
-
-        <button className='removeBtn' onClick={e => this.removeItem(e, this.props.id)}> x </button>
-        
-      </li>
-    );
-  }
-}
-
-export default Article;

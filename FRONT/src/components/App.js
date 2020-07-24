@@ -48,7 +48,7 @@ class App extends Component {
     console.log("titre : " + this.state.titre);
 
     const url = "http://localhost:3000/articles";
-    const postsData = { titre: this.state.titre, contenu: this.state.contenu};
+    const postsData = { titre: this.state.titre, contenu: this.state.contenu, Categorie: this.state.Categorie};
     fetch(url, {
       method: "POST",
       body: JSON.stringify(postsData), 
@@ -70,23 +70,20 @@ class App extends Component {
     } else if (!isLoaded) {
       return <div>Chargement…</div>;
     } else {
-      // const deleteArticle = (id) => {
-      //   setUsers(users.filter((user) => user.id !== id))
-      // }
-      
+  
       return (
         <div>
           {console.log(postsData)}
-          
+
           <List posts={postsData} />
 
           <hr />
 
           <h2>Ajouter un article</h2>
           <form onSubmit={this.handleSubmit}>
-            <input type="text" name="titre" onChange={this.handleChange} /><br />
-            <textarea type="text" name="contenu" onChange={this.handleChange} />
-            
+            <input type="text" name="titre" onChange={this.handleChange} placeholder="titre" /><br />            
+            <textarea type="text" name="contenu" onChange={this.handleChange} placeholder="Contenu" /><br />
+            <input type="text" name="Categorie" onChange={this.handleChange} placeholder="Categorie" />
             <button type="submit">Add</button>
           </form>
         </div>
