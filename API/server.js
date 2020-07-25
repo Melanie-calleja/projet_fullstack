@@ -19,7 +19,35 @@ MongoClient.connect('mongodb+srv://admin:rootroot@cluster0.vixc2.gcp.mongodb.net
         var db = client.db('FullStack');
         var ObjectId = require('mongodb').ObjectId; 
         var collection = db.collection('Articles');
+        var collectionVersioning = db.collection('Articles_Versions');
+        
         console.log('connecté à la DB');
+
+        app.route('/versioning').post(function (req, res, next) {
+            var numVersion = 1;
+            collectionVersioning.findOne({ idArticle: req.body.idArticle },{ sort: { _id: -1 }, limit: 1 }, function (err, result) {
+                if (err) throw err;
+                console.log(result);
+                console.log("numVers :" + numVersion);
+                console.log("num versions :" + result.numVersion);
+                numVersion = result.numVersion + 1; 
+                console.log("num versions 2 :" + numVersion);
+
+                var myObject = {
+                    idArticle: req.body.idArticle,
+                    titre: req.body.titre,
+                    contenu: req.body.contenu,
+                    numVersion: numVersion,
+                    //Date: req.body.Date,
+                }
+                
+                collectionVersioning.insertOne(myObject, function (err, result) {
+                    if (err) throw err;
+                    res.json(result)
+                })
+            })
+            
+        })
 
         app.route('/articles').get(function (req, res, next) {
             collection.find({}).toArray(function (err, result) {

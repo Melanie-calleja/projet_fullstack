@@ -39,9 +39,32 @@ class Article extends Component {
     this.setState({ [event.target.name]: event.target.value });
   };
 
-  handleUpdate(e, id) {
+  handleSave(e, idArticle) {
     e.preventDefault();
-    console.log("id : " + id);
+    console.log("id : " + idArticle);
+    console.log("id : " + this.props.titre);
+    console.log("id : " + this.props.contenu);
+
+    const url = "http://localhost:3000/versioning";
+    const data = { 
+      idArticle : idArticle,
+      titre: this.props.titre,
+      contenu: this.props.contenu,
+     };
+    fetch(url, {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((res) => res.json())
+      .catch((error) => console.error("Error:", error))
+      .then((response) => console.log("Success:", response))
+      .then(()=> this.handleUpdate(e, idArticle)); 
+  }
+
+  handleUpdate(e, id) {
+    
+    console.log("id Handle up : " + id);
     this.setState({ isEditing: false })
 
     const url = "http://localhost:3000/articles/" + id;
@@ -78,7 +101,7 @@ class Article extends Component {
     } else {
       articlesList = (
         <div>
-          <form onSubmit={(e) => this.handleUpdate(e, this.props.id)}>
+          <form onSubmit={(e) => this.handleSave(e, this.props.id)}>
             <input
               type="text"
               name="titre"
