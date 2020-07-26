@@ -7,7 +7,6 @@ class AddArticleForm extends Component {
 
   addArticle = (event) => {
     event.preventDefault();
-    console.log("titre : " + this.state.titre);
 
     const url = "http://localhost:3000/articles";
     const postsData = {

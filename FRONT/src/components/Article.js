@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import VersioningForm from "./VersioningForm";
 
 class Article extends Component {
   constructor(props) {
@@ -12,7 +13,6 @@ class Article extends Component {
 
   removeItem= (e, id) => {
     this.setState({ removed: !this.state.removed });
-    console.log("id : " + id);
     e.preventDefault();
 
     const url = "http://localhost:3000/articles/" + id;
@@ -41,9 +41,6 @@ class Article extends Component {
 
   handleSave(e, idArticle) {
     e.preventDefault();
-    console.log("id : " + idArticle);
-    console.log("id : " + this.props.titre);
-    console.log("id : " + this.props.contenu);
 
     const url = "http://localhost:3000/versioning";
     const data = { 
@@ -63,8 +60,6 @@ class Article extends Component {
   }
 
   handleUpdate(e, id) {
-    
-    console.log("id Handle up : " + id);
     this.setState({ isEditing: false })
 
     const url = "http://localhost:3000/articles/" + id;
@@ -134,6 +129,8 @@ class Article extends Component {
     return (
       <li>
         {articlesList}
+        <br />
+        <VersioningForm idArticle={this.props.id} titre={this.props.titre} contenu={this.props.contenu}  />
       </li>
     );
   }

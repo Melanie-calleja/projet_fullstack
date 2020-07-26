@@ -51,7 +51,7 @@ class App extends Component {
   
       return (
         <div className='App'>
-          {console.log(postsData)}
+          
 
           <List posts={postsData} />
 
