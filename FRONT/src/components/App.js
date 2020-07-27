@@ -3,6 +3,7 @@
 import List from './list'
 import AddArticleForm from "./AddArticleForm";
 import Categories from './Categories';
+import Tags from './Tags';
 
 import React, { Component } from "react";
 
