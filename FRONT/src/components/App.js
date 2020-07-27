@@ -1,8 +1,9 @@
 //import logo from './logo.svg';
 //import './App.css';
-import List from './list'
+import List from "./list";
 import AddArticleForm from "./AddArticleForm";
-import Categories from './Categories';
+import SearchByCategories from "./SearchByCategories";
+import Category from "./Category";
 
 import React, { Component } from "react";
 
@@ -12,8 +13,13 @@ class App extends Component {
     this.state = {
       error: null,
       isLoaded: false,
-      postsData: null
+      postsData: null,
+      article: null,
+      idArticle: "",
+      idCategory: "", 
     };
+    this.selectArticleChange = this.selectArticleChange.bind(this);
+    this.searchByTitre = this.searchByTitre.bind(this);
   }
 
   componentDidMount() {
@@ -40,27 +46,98 @@ class App extends Component {
       );
   }
 
+  selectArticleChange(event) {
+    this.setState({ idArticle: event.target.value });
+  }
+
+  cancelSearch(event) {
+    this.setState({ article: null });
+  }
+
+  searchByTitre(event) {
+    event.preventDefault();
+    console.log(this.state.idArticle);
+    const url = "http://localhost:3000/articles/" + this.state.idArticle;
+    fetch(url, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then(
+        (result) => {
+          this.setState({
+            article: result,
+          });
+        },
+        (error) => {
+          console.error("Error:", error);
+        }
+      );
+  }
+
+  selectCategorieChange(event) {
+    this.setState({ idCategory: event.target.value });
+  }
+
   render() {
-    const { error, isLoaded, postsData } = this.state;
-    
+    const { error, isLoaded, postsData, article } = this.state;
+    var articlesList = null;
+
+    if (article != null) {
+      articlesList = (
+        <div>
+          {article.titre}
+          <h3>{article.titre}</h3>
+          <p>{article.contenu}</p>
+          <p>Categorie :{<Category idCategory={article.idCategorie} />}</p>
+          <p>Tags : {article.tags}</p>
+          <p>Date : {article.date}</p>
+          <hr />
+          <button className="cancelSearch" onClick={(e) => this.cancelSearch()}>
+            retour
+          </button>
+        </div>
+      );
+    } else {
+      articlesList = <List posts={postsData} />;
+    }
 
     if (error) {
       return <div>Erreur : {error.message}</div>;
     } else if (!isLoaded) {
       return <div>Chargement…</div>;
     } else {
-  
       return (
-        <div className='App'>
-          
-
-          <List posts={postsData} />
+        <div className="App">
+          {articlesList}
 
           <hr />
-          <h2>Ajouter un article</h2>
-          <AddArticleForm />
-          {/* <h2>Categories</h2>
-          <Categories/> */}
+          <div>
+            <h2>Ajouter un article</h2>
+            <AddArticleForm />
+            <hr />
+            <h2>Recherche par Categories</h2>
+            <form onSubmit={this.searchByCategories}>
+              <select onChange={this.selectCategorieChange}>
+                {categories.map((element) => {
+                  return <option value={element._id}>{element.label}</option>;
+                })}
+              </select>
+              <button type="submit">Rechercher</button>
+            </form>
+            <hr />
+            <h2>Recherche par titre</h2>
+            <form onSubmit={this.searchByTitre}>
+              <select onChange={this.selectArticleChange}>
+                {postsData.map((element) => {
+                  return <option value={element._id}>{element.titre}</option>;
+                })}
+              </select>
+              <button type="submit">Rechercher</button>
+            </form>
+          </div>
         </div>
       );
     }
