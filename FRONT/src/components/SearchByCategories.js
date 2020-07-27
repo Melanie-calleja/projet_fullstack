@@ -5,6 +5,7 @@ export default class SearchByCategories extends Component {
     super(props);
     this.state = {
       categories: [],
+      idCategory: null, 
     };
   }
   componentDidMount() {
@@ -17,21 +18,19 @@ export default class SearchByCategories extends Component {
       });
   }
 
-  selectCategorieChange(event) {
-    this.setState({ valueCategory: event.target.value });
-  }
+  
 
   render() {
     var categories = this.state.categories;
     return (
-      <form onSubmit={this.searchByCategories}>
+      
         <select onChange={this.selectCategorieChange}>
           {categories.map((element) => {
             return <option value={element._id}>{element.label}</option>;
           })}
         </select>
-        <button type="submit">Rechercher</button>
-      </form>
+        
+      
     );
   }
 }

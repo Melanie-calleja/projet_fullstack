@@ -16,7 +16,7 @@ class App extends Component {
       postsData: null,
       article: null,
       idArticle: "",
-      idCategory: "", 
+      idCategory: "",
     };
     this.selectArticleChange = this.selectArticleChange.bind(this);
     this.searchByTitre = this.searchByTitre.bind(this);
@@ -77,9 +77,7 @@ class App extends Component {
       );
   }
 
-  selectCategorieChange(event) {
-    this.setState({ idCategory: event.target.value });
-  }
+  
 
   render() {
     const { error, isLoaded, postsData, article } = this.state;
@@ -120,11 +118,9 @@ class App extends Component {
             <hr />
             <h2>Recherche par Categories</h2>
             <form onSubmit={this.searchByCategories}>
-              <select onChange={this.selectCategorieChange}>
-                {categories.map((element) => {
-                  return <option value={element._id}>{element.label}</option>;
-                })}
-              </select>
+              
+                <SearchByCategories />
+              
               <button type="submit">Rechercher</button>
             </form>
             <hr />
