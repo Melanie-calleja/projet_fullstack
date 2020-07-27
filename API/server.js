@@ -198,7 +198,7 @@ MongoClient.connect('mongodb+srv://admin:rootroot@cluster0.vixc2.gcp.mongodb.net
         var myObject = {
           titre: req.body.titre,
           contenu: req.body.contenu,
-          Categorie: req.body.Categorie,
+          idCategorie: req.body.idCategorie,
           Date: dateTime,
           //Version: req.body.Version,
           //tag: req.body.tag
