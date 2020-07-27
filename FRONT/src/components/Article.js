@@ -80,7 +80,6 @@ class Article extends Component {
     const data = {
       titre: this.state.titre,
       contenu: this.state.contenu,
-      idCategorie: this.state.Categorie,
     };
     fetch(url, {
       method: "PUT",
@@ -90,7 +89,9 @@ class Article extends Component {
       .then((res) => res.json())
       .catch((error) => console.error("Error:", error))
       .then((response) => console.log("Success:", response));
+      window.location.reload(false);
   }
+
 
   render() {
     var articlesList = null;
@@ -132,13 +133,6 @@ class Article extends Component {
               placeholder={this.props.contenu}
             />
             <br />
-            <input
-              type="text"
-              name="Categorie"
-              defaultValue={this.props.categorie}
-              onChange={this.handleChange}
-              placeholder={this.props.categorie}
-            />
             <button type="submit">Modifier</button>
           </form>
           <button onClick={e => this.cancelEdit()} className="btn">annuler</button>

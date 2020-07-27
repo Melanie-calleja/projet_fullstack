@@ -4,30 +4,32 @@ class AddArticleForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        categories: [],
-        valueCategory:'',
-        category: '',
-    }
-    this.selectCategorieChange =  this.selectCategorieChange.bind(this);
-}
+      categories: [],
+      valueCategory: "",
+      category: "",
+    };
+    this.selectCategorieChange = this.selectCategorieChange.bind(this);
+  }
   handleChange = (event) => {
     this.setState({ [event.target.name]: event.target.value });
   };
-componentDidMount(){
-  fetch('http://localhost:3000/categories').then(
-            res => res.json()
-        ).then((categories => {
-            this.setState({
-                categories: categories,
-            });
-        }))
-}
-selectCategorieChange(event) {
-  this.setState({valueCategory: event.target.value});
-}
+  componentDidMount() {
+    fetch("http://localhost:3000/categories")
+      .then((res) => res.json())
+      .then((categories) => {
+        this.setState({
+          categories: categories,
+        });
+      });
+  }
+  
+  selectCategorieChange(event) {
+    this.setState({ valueCategory: event.target.value });
+  }
+
   addArticle = (event) => {
     event.preventDefault();
-  
+
     const url = "http://localhost:3000/articles";
     const postsData = {
       titre: this.state.titre,
@@ -42,6 +44,7 @@ selectCategorieChange(event) {
       .then((res) => res.json())
       .catch((error) => console.error("Error:", error))
       .then((response) => console.log("Success:", response));
+    window.location.reload(false);
   };
 
   render() {
@@ -63,12 +66,10 @@ selectCategorieChange(event) {
         <br />
         <h4>Categories</h4>
         <select onChange={this.selectCategorieChange}>
-            {
-                this.state.categories.map(element => {
-                    return <option value={element._id}>{element.label}</option>
-                })
-            }
-           </select>
+          {this.state.categories.map((element) => {
+            return <option value={element._id}>{element.label}</option>;
+          })}
+        </select>
         <button type="submit">Add</button>
       </form>
     );
