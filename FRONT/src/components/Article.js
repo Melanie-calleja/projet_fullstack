@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import VersioningForm from "./VersioningForm";
 import Categories from './Categories';
 import Category from './Category';
+import Tags from './Tags';
+import Tag from './Tag';
 
 class Article extends Component {
   constructor(props) {
@@ -12,7 +14,10 @@ class Article extends Component {
       isEditing: false,
       categories: [],
       category: '',
-      valueCategory: ''
+      valueCategory: '',
+      tags: [],
+      tag: '',
+      valueTag: ''
     };
   }
   componentDidMount() {
@@ -24,6 +29,16 @@ class Article extends Component {
       });
     }))
   }
+  componentDidMount() {
+    fetch('http://localhost:3000/tags').then(
+        res => res.json()
+    ).then((tags => {
+      this.setState({
+        tags: tags,
+      });
+    }))
+  }
+
 
 
   removeItem = (e, id) => {
@@ -80,6 +95,8 @@ class Article extends Component {
     const data = {
       titre: this.state.titre,
       contenu: this.state.contenu,
+      idCategorie: this.state.Categorie,
+      idTag : this.state.Tag,
     };
     fetch(url, {
       method: "PUT",
@@ -89,9 +106,7 @@ class Article extends Component {
       .then((res) => res.json())
       .catch((error) => console.error("Error:", error))
       .then((response) => console.log("Success:", response));
-      window.location.reload(false);
   }
-
 
   render() {
     var articlesList = null;
@@ -133,6 +148,13 @@ class Article extends Component {
               placeholder={this.props.contenu}
             />
             <br />
+            <input
+              type="text"
+              name="Categorie"
+              defaultValue={this.props.categorie}
+              onChange={this.handleChange}
+              placeholder={this.props.categorie}
+            />
             <button type="submit">Modifier</button>
           </form>
           <button onClick={e => this.cancelEdit()} className="btn">annuler</button>

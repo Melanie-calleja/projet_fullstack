@@ -19,6 +19,7 @@ MongoClient.connect('mongodb+srv://admin:rootroot@cluster0.vixc2.gcp.mongodb.net
         var collection = db.collection('Articles');
         var collectionVersioning = db.collection('Articles_Versions');
         var categories = db.collection('Categories');
+        var tags = db.collection('Tags');
         
         console.log('connecté à la DB');
 
@@ -104,17 +105,14 @@ MongoClient.connect('mongodb+srv://admin:rootroot@cluster0.vixc2.gcp.mongodb.net
             })
         })
 
-    
-        app.route("/categorie/:categorie").get(function (req, res, next) {
+        app.route('/categorie/:categorie').get(function (req, res, next) {
             //var query = { Categorie: "PHP" };
-            collection
-              .find({ idCategorie: req.params.categorie })
-              .toArray(function (err, result) {
+            collection.find({ Categorie: req.params.categorie }).toArray(function (err, result) {
                 if (err) throw err;
                 //console.log(result);
-                res.json(result);
-              });
-          });
+                res.json(result)
+            })
+        })
 
         app.route('/category').post(function (req, res, next) {
             var myObject = {
@@ -134,6 +132,40 @@ MongoClient.connect('mongodb+srv://admin:rootroot@cluster0.vixc2.gcp.mongodb.net
         })
         app.route('/category/:id').get(function (req, res, next) {
             categories.findOne({
+                _id: new ObjectId(req.params.id)
+            }, function (err, result) {
+                if (err) throw err;
+                res.json(result)
+            })
+        })
+
+        app.route('/tag/:tag').get(function (req, res, next) {
+            //var query = { Tag: "PHP" };
+            collection.find({ Tag: req.params.tag }).toArray(function (err, result) {
+                if (err) throw err;
+                //console.log(result);
+                res.json(result)
+            })
+        })
+
+        app.route('/tag').post(function (req, res, next) {
+            var myObject = {
+                label: req.body.label,
+            }
+            tags.insertOne(myObject, function (err, result) {
+                if (err) throw err;
+                res.json(result)
+            })
+        })
+        app.route('/tags').get(function (req, res, next) {
+            tags.find({}).toArray(function (err, result) {
+
+                if (err) throw err;
+                res.json(result)
+            })
+        })
+        app.route('/tag/:id').get(function (req, res, next) {
+            tags.findOne({
                 _id: new ObjectId(req.params.id)
             }, function (err, result) {
                 if (err) throw err;
@@ -182,7 +214,26 @@ MongoClient.connect('mongodb+srv://admin:rootroot@cluster0.vixc2.gcp.mongodb.net
         );
       });
 
-      
+      app.route("/categorie/:categorie").get(function (req, res, next) {
+        //var query = { Categorie: "PHP" };
+        collection
+          .find({ Categorie: req.params.categorie })
+          .toArray(function (err, result) {
+            if (err) throw err;
+            //console.log(result);
+            res.json(result);
+          });
+      });
+
+      app.route("/tag/:tag").get(function (req, res, next) {
+            collection
+                .find({ Tag: req.params.tag })
+                .toArray(function (err, result) {
+                    if (err) throw err;
+                    //console.log(result);
+                    res.json(result);
+                });
+      });
 
       app.route("/articles").post(function (req, res, next) {
         var today = new Date();
@@ -193,6 +244,7 @@ MongoClient.connect('mongodb+srv://admin:rootroot@cluster0.vixc2.gcp.mongodb.net
           titre: req.body.titre,
           contenu: req.body.contenu,
           idCategorie: req.body.idCategorie,
+          idTag: req.body.idTag,
           Date: dateTime,
           //Version: req.body.Version,
           //tag: req.body.tag
@@ -226,8 +278,9 @@ MongoClient.connect('mongodb+srv://admin:rootroot@cluster0.vixc2.gcp.mongodb.net
             $set: {
               titre: req.body.titre,
               contenu: req.body.contenu,
-              //Categorie: req.body.Categorie,
-              Date: dateTime,
+              Categorie: req.body.Categorie,
+              Tag: req.body.Tag,
+              "Date": dateTime,
               //"Version": req.body.Version,
               //"tag": req.body.tag
             },
