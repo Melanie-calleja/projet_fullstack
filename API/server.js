@@ -13,16 +13,16 @@ app.use(cors())
 var hostname = 'localhost';
 var port = 3000;
 
-MongoClient.connect('mongodb+srv://admin:rootroot@cluster0.vixc2.gcp.mongodb.net/<dbname>?retryWrites=true&w=majority', function (err, client) {
+MongoClient.connect('mongodb+srv://admin:rootroot@cluster0.vixc2.gcp.mongodb.net/<db:name>?retryWrites=true&w=majority', function (err, client) {
     if (err) throw err;
     else {
         var db = client.db('FullStack');
         var ObjectId = require('mongodb').ObjectId; 
         var collection = db.collection('Articles');
         var collectionVersioning = db.collection('Articles_Versions');
+        var categories = db.collection('Categories');
         
         console.log('connecté à la DB');
-
 
         app.route('/versioning').post(function (req, res, next) {
             var numVersion = 1;
@@ -51,7 +51,6 @@ MongoClient.connect('mongodb+srv://admin:rootroot@cluster0.vixc2.gcp.mongodb.net
                     res.json(result)
                 })
             })
-            
         })
 
 
@@ -120,12 +119,37 @@ MongoClient.connect('mongodb+srv://admin:rootroot@cluster0.vixc2.gcp.mongodb.net
             var myObject = {
                 titre: req.body.titre,
                 contenu: req.body.contenu,
-                Categorie: req.body.Categorie,
+                idCategorie: req.body.idCategorie,
                 //Date: req.body.Date,
                 //Version: req.body.Version,
                 //tag: req.body.tag
             }
             collection.insertOne(myObject, function (err, result) {
+                if (err) throw err;
+                res.json(result)
+            })
+        })
+
+        app.route('/category').post(function (req, res, next) {
+            var myObject = {
+                label: req.body.label,
+            }
+            categories.insertOne(myObject, function (err, result) {
+                if (err) throw err;
+                res.json(result)
+            })
+        })
+        app.route('/categories').get(function (req, res, next) {
+            categories.find({}).toArray(function (err, result) {
+            
+                if (err) throw err;
+                res.json(result)
+            })
+        })
+        app.route('/category/:id').get(function (req, res, next) {
+            categories.findOne({
+                _id: new ObjectId(req.params.id)
+            }, function (err, result) {
                 if (err) throw err;
                 res.json(result)
             })
