@@ -2,6 +2,7 @@
 //import './App.css';
 import List from './list'
 import AddArticleForm from "./AddArticleForm";
+import Categories from './Categories';
 
 import React, { Component } from "react";
 
@@ -58,7 +59,8 @@ class App extends Component {
           <hr />
           <h2>Ajouter un article</h2>
           <AddArticleForm />
-          
+          {/* <h2>Categories</h2>
+          <Categories/> */}
         </div>
       );
     }
