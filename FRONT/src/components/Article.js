@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import VersioningForm from "./VersioningForm";
+import Categories from './Categories';
+import Category from './Category';
 
 class Article extends Component {
   constructor(props) {
@@ -8,10 +10,23 @@ class Article extends Component {
       value: " ",
       removed: false,
       isEditing: false,
+      categories: [],
+      category: '',
+      valueCategory: ''
     };
   }
+  componentDidMount() {
+    fetch('http://localhost:3000/categories').then(
+      res => res.json()
+    ).then((categories => {
+      this.setState({
+        categories: categories,
+      });
+    }))
+  }
 
-  removeItem= (e, id) => {
+
+  removeItem = (e, id) => {
     this.setState({ removed: !this.state.removed });
     e.preventDefault();
 
@@ -38,16 +53,15 @@ class Article extends Component {
   handleChange = (event) => {
     this.setState({ [event.target.name]: event.target.value });
   };
-
   handleSave(e, idArticle) {
     e.preventDefault();
 
     const url = "http://localhost:3000/versioning";
-    const data = { 
-      idArticle : idArticle,
+    const data = {
+      idArticle: idArticle,
       titre: this.props.titre,
       contenu: this.props.contenu,
-     };
+    };
     fetch(url, {
       method: "POST",
       body: JSON.stringify(data),
@@ -56,18 +70,18 @@ class Article extends Component {
       .then((res) => res.json())
       .catch((error) => console.error("Error:", error))
       .then((response) => console.log("Success:", response))
-      .then(()=> this.handleUpdate(e, idArticle)); 
+      .then(() => this.handleUpdate(e, idArticle));
   }
 
   handleUpdate(e, id) {
     this.setState({ isEditing: false })
 
     const url = "http://localhost:3000/articles/" + id;
-    const data = { 
+    const data = {
       titre: this.state.titre,
       contenu: this.state.contenu,
-      Categorie: this.state.Categorie,
-     };
+      idCategorie: this.state.Categorie,
+    };
     fetch(url, {
       method: "PUT",
       body: JSON.stringify(data),
@@ -80,12 +94,17 @@ class Article extends Component {
 
   render() {
     var articlesList = null;
+  
     if (!this.state.isEditing) {
       articlesList = (
         <div>
           <h3>{this.props.titre}</h3>
           <p>{this.props.contenu}</p>
-          <p>Categorie : {this.props.categorie}</p>
+          <p>Categorie :
+          {
+            <Category idCategory={this.props.categorie}/>
+          }
+          </p>
           <p>Tags : {this.props.tags}</p>
           <p>Date : {this.props.date}</p>
 
@@ -127,11 +146,14 @@ class Article extends Component {
       )
     }
     return (
-      <li>
-        {articlesList}
-        <br />
-        <VersioningForm idArticle={this.props.id} titre={this.props.titre} contenu={this.props.contenu}  />
-      </li>
+      <>
+
+        <li>
+          {articlesList}
+          <br />
+          <VersioningForm idArticle={this.props.id} titre={this.props.titre} contenu={this.props.contenu} />
+        </li>
+      </>
     );
   }
 }

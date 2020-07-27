@@ -1,18 +1,38 @@
 import React, { Component } from "react";
 
 class AddArticleForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+        categories: [],
+        valueCategory:'',
+        category: '',
+    }
+    this.selectCategorieChange =  this.selectCategorieChange.bind(this);
+}
   handleChange = (event) => {
     this.setState({ [event.target.name]: event.target.value });
   };
-
+componentDidMount(){
+  fetch('http://localhost:3000/categories').then(
+            res => res.json()
+        ).then((categories => {
+            this.setState({
+                categories: categories,
+            });
+        }))
+}
+selectCategorieChange(event) {
+  this.setState({valueCategory: event.target.value});
+}
   addArticle = (event) => {
     event.preventDefault();
-
+  
     const url = "http://localhost:3000/articles";
     const postsData = {
       titre: this.state.titre,
       contenu: this.state.contenu,
-      Categorie: this.state.Categorie,
+      idCategorie: this.state.valueCategory,
     };
     fetch(url, {
       method: "POST",
@@ -41,12 +61,14 @@ class AddArticleForm extends Component {
           placeholder="Contenu"
         />
         <br />
-        <input
-          type="text"
-          name="Categorie"
-          onChange={this.handleChange}
-          placeholder="Categorie"
-        />
+        <h4>Categories</h4>
+        <select onChange={this.selectCategorieChange}>
+            {
+                this.state.categories.map(element => {
+                    return <option value={element._id}>{element.label}</option>
+                })
+            }
+           </select>
         <button type="submit">Add</button>
       </form>
     );
